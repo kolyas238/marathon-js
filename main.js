@@ -1,55 +1,79 @@
-let firstRow = 'мама мыла раму';
-let secondRow = 'собака друг человека';
-let letter = prompt('введите букву, например', 'а');
+const $btn = document.getElementById('btn-kick');
+const $trickyBtn = document.getElementById('btn-kick-enemy');
+const character = {
+  name: 'Pikachu',
+  defaultHP: 100,
+  damageHP: 100,
+  elHP: document.getElementById('health-character'),
+  elProgressbar: document.getElementById('progressbar-character'),
+}
 
-function letterCounter(firstStr, secondStr) {
-  let sum = 0;
-  let num = 0;
-  for (var i = 0; i <= firstStr.length; i++) {
-    if (firstStr.charAt(i) === letter) {
-      sum++;
-    }
-  }
-  for (var j = 0; j <= secondStr.length; j++) {
-    if (secondStr.charAt(j) === letter) {
-      num++;
-    }
-  }
-  if (sum > num) {
-    return alert('в строке ' + firstRow + ' буква ' + letter + ' встречается большее количество раз');
-  } else if (num > sum) {
-    return alert('в строке ' + secondRow + ' буква ' + letter + ' встречается большее количество раз');
+const enemy = {
+  name: 'Charmander',
+  defaultHP: 100,
+  damageHP: 100,
+  elHP: document.getElementById('health-enemy'),
+  elProgressbar: document.getElementById('progressbar-enemy'),
+}
+
+// $btn.addEventListener('click', function () {
+//   console.log('Kick')
+//   changeHP(random(20), character);
+//   changeHP(random(20), enemy);
+// });
+
+function clickToButt(btn) {
+  if (btn !== $trickyBtn) {
+    btn.addEventListener('click', function () {
+      console.log('Kick')
+      changeHP(random(20), character);
+      changeHP(random(20), enemy);
+    });
   } else {
-    return alert('что-то пошло не так');
+    btn.addEventListener('click', function () {
+      console.log('Kick to enemy');
+      changeHP(random(20), enemy);
+    });
   }
 }
 
-console.log(letterCounter(firstRow, secondRow));
+clickToButt($btn);
+clickToButt($trickyBtn);
 
-/* Второе задание*/
-let num = '+71234567890';
+function init() {
+  console.log('Start Game!');
+  renderHP(character);
+  renderHP(enemy);
+}
 
-function formattedPhone(phone) {
-  let acc = '';
-  if (phone.length > 12) {
-    return 'Слишком длинный номер'
-  } else if (phone.length < 12) {
-    return 'Слишком короткий номер'
+function renderHP(person) {
+  renderHPLife(person);
+  renderProgressbarHP(person);
+}
+
+function renderHPLife(person) {
+  person.elHP.innerText = person.damageHP + ' / ' + person.defaultHP;
+}
+
+function renderProgressbarHP(person) {
+  person.elProgressbar.style.width = person.damageHP + '%';
+}
+
+function changeHP(count, person) {
+  if (person.damageHP < count) {
+    person.damageHP = 0;
+    alert('Бедный ' + person.name + ' проиграл бой!');
+    $btn.disabled = true;
+    $trickyBtn.disabled = true;
   } else {
-    for (var i = 0; i < phone.length; i++) {
-      acc += phone[i];
-      if (acc.length == 2) {
-        acc += ' (';
-      } else if (acc.length == 7) {
-        acc += ') ';
-      } else if (acc.length == 12) {
-        acc += '-';
-      } else if (acc.length == 15) {
-        acc += '-';
-      }
-    };
+    person.damageHP -= count;
   }
-  return acc;
-};
 
-console.log(formattedPhone(num));
+  renderHP(person);
+}
+
+function random(num) {
+  return Math.ceil(Math.random() * num);
+}
+
+init();
