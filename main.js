@@ -29,6 +29,24 @@ const enemy = {
 //   changeHP(random(20), character);
 //   changeHP(random(20), enemy);
 // });
+let clickCounter = function(){
+  let $btns = document.querySelectorAll('.button');
+  let acc = 8;
+  $btns.forEach((btn) => {
+    let btnText = btn.textContent;
+    btn.addEventListener('click', function() {
+      acc--;
+      if (!acc) {
+        $btns.forEach(function(item) {
+          item.disabled = true;
+        })
+      }
+      btn.textContent = (`Нажата ${btnText}, осталось нажатий ${acc}`);
+    })
+  })
+};
+
+clickCounter();
 
 function clickToButt(btn) {
   if (btn !== $trickyBtn) {
@@ -91,7 +109,7 @@ function generateLogs(firstPerson, secondPerson, count) {
       `${firstPerson.name} вспомнил что-то важное, но неожиданно ${secondPerson.name}, не помня себя от испуга, ударил в предплечье врага. ${count} [${firstPerson.damageHP}/${firstPerson.defaultHP}]`,
       `${firstPerson.name} поперхнулся, и за это ${secondPerson.name} с испугу приложил прямой удар коленом в лоб врага. ${count} [${firstPerson.damageHP}/${firstPerson.defaultHP}]`,
       `${firstPerson.name} забылся, но в это время наглый ${secondPerson.name}, приняв волевое решение, неслышно подойдя сзади, ударил. ${count} [${firstPerson.damageHP}/${firstPerson.defaultHP}]`,
-      `${firstPerson.name} пришел в себя, но неожиданно ${secondPerson.name} случайно нанес мощнейший удар. [${firstPerson.damageHP}/${firstPerson.defaultHP}]`,
+      `${firstPerson.name} пришел в себя, но неожиданно ${secondPerson.name} случайно нанес мощнейший удар. ${count} [${firstPerson.damageHP}/${firstPerson.defaultHP}]`,
       `${firstPerson.name} поперхнулся, но в это время ${secondPerson.name} нехотя раздробил кулаком \<вырезанно цензурой\> противника. ${count} [${firstPerson.damageHP}/${firstPerson.defaultHP}]`,
       `${firstPerson.name} удивился, а ${secondPerson.name} пошатнувшись влепил подлый удар. ${count} [${firstPerson.damageHP}/${firstPerson.defaultHP}]`,
       `${firstPerson.name} высморкался, но неожиданно ${secondPerson.name} провел дробящий удар. ${count} [${firstPerson.damageHP}/${firstPerson.defaultHP}]`,
@@ -105,12 +123,15 @@ function generateLogs(firstPerson, secondPerson, count) {
 
 function getLog(log) {
   let $logs = document.querySelector('.logs');
-  let test = document.createElement('div');
-  test.innerText = log;
-  test.style.background = '#ececec';
-  test.style.width = '50%';
-  test.style.margin = '0 auto';
-  $logs.insertBefore(test, $logs.children[0]);
+  let element = document.createElement('div');
+  element.innerText = log;
+  element.style.background = 'linear-gradient(to right, rgba(12, 134, 170,.8), rgba(137, 11, 221,.8))';
+  element.style.width = '50%';
+  element.style.color = '#fff';
+  element.style.borderRadius = '15px';
+  element.style.margin = '0 auto 15px';
+  element.style.padding = '15px';
+  $logs.insertBefore(element, $logs.children[0]);
 }
 
 
